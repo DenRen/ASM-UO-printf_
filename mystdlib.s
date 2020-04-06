@@ -284,16 +284,20 @@ printf_s_:
 ;───────────────────────────────────┬────────────────┐
 ;Input: stack                       │    printf__    │  
 ;Destr: rax rbx rcx rdx rsi rdi     └────────────────┘
-;		r8  r9  r10 r11 r12 r13
-%macro printf__ 0
+;		r8  r9  r10 r11 r12 r13 r14
+printf__:
 	
-	pop rsi				; rsi == string 
+	mov r14, 8					; I will be use r14 how counter for arg pointer
+ 	
+	mov rsi, [rsp + r14]	; rsi == string 
+	add r14, 8
 	mov rbx, rsi
 
 ;%use altreg
 	xor rcx, rcx
 	xor rdx, rdx
 	xor r9, r9
+
 scan_prf_:
 	
 	lodsq
@@ -357,7 +361,8 @@ end_proc_spec_symb:
 	dec rdx
 	call print_buf_
 	add rbx, 2
-	pop rax
+	mov rax, [rsp + r14]
+	add r14, 8
 	mov r12, rsi
 	mov r13, rdi
 %endmacro
@@ -396,8 +401,9 @@ call_P_s:
 finish_printf_:
 			
 	call print_buf_
-	
-%endmacro
+
+	ret	
+;%endmacro
 ; Dtr: rax, rdi, rdx = 0, r10, r11, rbx = rsi  
 
 print_buf_:

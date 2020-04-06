@@ -3,7 +3,7 @@
 
 endl 	equ 0x0		; End of line
 brkl	equ 0xA		; Line break
-finl 	equ 0xA 		; Line break and end of line
+finl 	equ 0xA 	; Line break and end of line
 
 %macro strlen 0
 	cld
